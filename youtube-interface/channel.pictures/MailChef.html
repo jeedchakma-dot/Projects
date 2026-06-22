@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MailChef — AI Restaurant Email SaaS</title>
+<style>
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fff;
+  --bg2:#f8f7f4;
+  --bg3:#f0ede8;
+  --text:#1a1a1a;
+  --text2:#555;
+  --text3:#999;
+  --border:rgba(0,0,0,.10);
+  --border2:rgba(0,0,0,.18);
+  --accent:#1a1a1a;
+  --green:#1D9E75;
+  --green-bg:#E1F5EE;
+  --green-text:#085041;
+  --blue-bg:#E6F1FB;
+  --blue-text:#0C447C;
+  --amber-bg:#FAEEDA;
+  --amber-text:#633806;
+  --purple-bg:#EEEDFE;
+  --purple-text:#3C3489;
+  --r:8px;--rl:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+input,select,textarea,button{font-family:inherit;}
+
+/* ── Nav ── */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:.5px solid var(--border);}
+.nav-inner{max-width:1080px;margin:0 auto;padding:.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:17px;font-weight:600;color:var(--text);}
+.nav-links{display:flex;align-items:center;gap:1.5rem;}
+.nav-links a{font-size:14px;color:var(--text2);}
+.nav-links a:hover{color:var(--text);}
+.btn-outline-sm{padding:6px 14px;border:.5px solid var(--border2);border-radius:var(--r);font-size:13px;color:var(--text);}
+.btn-outline-sm:hover{background:var(--bg2);}
+.btn-sm{padding:7px 16px;background:var(--text);color:#fff;border-radius:var(--r);font-size:13px;font-weight:500;}
+.btn-sm:hover{opacity:.85;}
+
+/* ── Hero ── */
+.hero{padding:6rem 1.5rem 5rem;text-align:center;background:var(--bg);}
+.hero-inner{max-width:680px;margin:0 auto;}
+.hero-badge{display:inline-block;font-size:12px;font-weight:500;letter-spacing:.05em;color:var(--green-text);background:var(--green-bg);padding:5px 14px;border-radius:20px;margin-bottom:1.5rem;}
+.hero h1{font-size:clamp(2rem,5vw,3.25rem);font-weight:600;line-height:1.15;color:var(--text);margin-bottom:1.25rem;letter-spacing:-.02em;}
+.hero h1 em{font-style:italic;color:var(--text2);}
+.hero-sub{font-size:16px;color:var(--text2);line-height:1.75;max-width:520px;margin:0 auto 2rem;}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem;}
+.btn-hero{padding:13px 28px;background:var(--text);color:#fff;border-radius:var(--r);font-size:14px;font-weight:600;letter-spacing:.01em;}
+.btn-hero:hover{opacity:.85;}
+.btn-hero-ghost{padding:12px 24px;border:.5px solid var(--border2);border-radius:var(--r);font-size:14px;color:var(--text2);}
+.btn-hero-ghost:hover{background:var(--bg2);}
+.hero-proof{font-size:12px;color:var(--text3);}
+
+/* ── Sections ── */
+.section{padding:5rem 1.5rem;}
+.section-alt{background:var(--bg2);}
+.section-inner{max-width:1080px;margin:0 auto;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.75rem;}
+.section h2{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:600;color:var(--text);margin-bottom:3rem;letter-spacing:-.01em;}
+
+/* ── Steps ── */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;}
+.step-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;margin-bottom:1rem;}
+.step-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:.5rem;}
+.step-card p{font-size:14px;color:var(--text2);line-height:1.7;}
+
+/* ── Features ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;}
+.feature-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1.5rem;}
+.feature-icon{font-size:22px;margin-bottom:.875rem;}
+.feature-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:.5rem;}
+.feature-card p{font-size:13px;color:var(--text2);line-height:1.7;}
+
+/* ── Pricing ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:1.5rem;}
+.price-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1.75rem;position:relative;}
+.price-featured{border:2px solid var(--text);}
+.price-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;white-space:nowrap;}
+.price-tier{font-size:13px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+.price-amount{font-size:36px;font-weight:600;color:var(--text);margin-bottom:.75rem;}
+.price-amount span{font-size:14px;color:var(--text3);font-weight:400;}
+.price-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1.25rem;}
+.price-features{list-style:none;margin-bottom:1.5rem;}
+.price-features li{font-size:13px;color:var(--text2);padding:5px 0;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:8px;}
+.price-features li::before{content:'✓';color:var(--green);font-weight:600;font-size:12px;}
+.btn-price{display:block;text-align:center;padding:11px;border:.5px solid var(--border2);border-radius:var(--r);font-size:13px;font-weight:500;color:var(--text);transition:all .15s;}
+.btn-price:hover{background:var(--bg2);}
+.btn-price-featured{background:var(--text);color:#fff;border-color:transparent;}
+.btn-price-featured:hover{opacity:.85;background:var(--text);}
+.pricing-note{font-size:12px;color:var(--text3);text-align:center;}
+
+/* ── Footer ── */
+.footer{background:var(--bg2);border-top:.5px solid var(--border);padding:3rem 1.5rem;}
+.footer-inner{max-width:1080px;margin:0 auto;text-align:center;}
+.footer-logo{font-size:18px;font-weight:600;margin-bottom:.5rem;}
+.footer-tagline{font-size:13px;color:var(--text3);margin-bottom:1.5rem;}
+.footer-links{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-bottom:1rem;}
+.footer-links a{font-size:13px;color:var(--text3);}
+.footer-links a:hover{color:var(--text);}
+.footer-copy{font-size:12px;color:var(--text3);}
+
+/* ── Auth pages ── */
+.auth-page{min-height:100vh;background:var(--bg3);display:flex;align-items:center;justify-content:center;padding:2rem;}
+.auth-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:2rem;width:100%;max-width:420px;}
+.auth-logo{font-size:18px;font-weight:600;text-align:center;margin-bottom:.5rem;}
+.auth-title{font-size:20px;font-weight:600;text-align:center;margin-bottom:.25rem;}
+.auth-sub{font-size:13px;color:var(--text3);text-align:center;margin-bottom:1.5rem;}
+.auth-field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.auth-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;}
+.auth-input{padding:10px 12px;border:.5px solid var(--border2);border-radius:var(--r);font-size:14px;color:var(--text);background:var(--bg);outline:none;}
+.auth-input:focus{border-color:#888;}
+.auth-btn{width:100%;padding:11px;background:var(--text);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;margin-top:.5rem;transition:opacity .15s;}
+.auth-btn:hover{opacity:.85;}
+.auth-footer{text-align:center;font-size:13px;color:var(--text3);margin-top:1rem;}
+.auth-footer a{color:var(--text);font-weight:500;}
+
+/* ── Dashboard ── */
+.dash-layout{display:flex;min-height:100vh;}
+.sidebar{width:220px;flex-shrink:0;background:var(--bg);border-right:.5px solid var(--border);padding:1.25rem;display:flex;flex-direction:column;gap:.25rem;}
+.sidebar-logo{font-size:15px;font-weight:600;padding:.5rem .75rem;margin-bottom:.75rem;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:.625rem .75rem;border-radius:var(--r);font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;}
+.sidebar-item:hover{background:var(--bg2);color:var(--text);}
+.sidebar-item.active{background:var(--bg2);color:var(--text);font-weight:500;}
+.sidebar-item .icon{font-size:14px;width:18px;text-align:center;}
+.sidebar-bottom{margin-top:auto;}
+.sidebar-plan{font-size:11px;padding:.625rem .75rem;background:var(--bg2);border-radius:var(--r);color:var(--text3);}
+.sidebar-plan strong{color:var(--text2);}
+
+.dash-main{flex:1;overflow-y:auto;background:var(--bg3);}
+.dash-header{background:var(--bg);border-bottom:.5px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.dash-title{font-size:16px;font-weight:600;}
+.dash-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.dash-content{padding:1.5rem;}
+
+/* ── Stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem;}
+.stat-card{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.stat-val{font-size:24px;font-weight:600;color:var(--text);}
+.stat-note{font-size:11px;color:var(--text3);margin-top:2px;}
+.stat-note.up{color:var(--green-text);}
+
+/* ── Panel ── */
+.panel{background:var(--bg);border:.5px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:1rem;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.panel-title{font-size:14px;font-weight:600;color:var(--text);}
+.panel-action{font-size:12px;padding:6px 12px;border:.5px solid var(--border2);border-radius:var(--r);background:transparent;cursor:pointer;color:var(--text);}
+.panel-action:hover{background:var(--bg2);}
+
+/* ── Table ── */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{text-align:left;padding:8px 12px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;border-bottom:.5px solid var(--border);}
+.data-table td{padding:10px 12px;border-bottom:.5px solid var(--border);color:var(--text2);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--bg2);}
+
+/* ── Badge ── */
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.badge-green{background:var(--green-bg);color:var(--green-text);}
+.badge-blue{background:var(--blue-bg);color:var(--blue-text);}
+.badge-amber{background:var(--amber-bg);color:var(--amber-text);}
+.badge-purple{background:var(--purple-bg);color:var(--purple-text);}
+.badge-red{background:#FCEBEB;color:#791F1F;}
+.badge-gray{background:#F1EFE8;color:#444441;}
+
+/* ── Form ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-field{display:flex;flex-direction:column;gap:5px;}
+.form-field-full{grid-column:1/-1;}
+.form-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;}
+.form-input,.form-select,.form-textarea{padding:9px 11px;border:.5px solid var(--border2);border-radius:var(--r);font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:inherit;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#888;}
+.form-textarea{resize:vertical;min-height:80px;}
+
+/* ── Buttons ── */
+.btn-primary{padding:10px 20px;background:var(--text);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;}
+.btn-primary:hover{opacity:.85;}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;}
+.btn-secondary{padding:9px 18px;border:.5px solid var(--border2);background:transparent;border-radius:var(--r);font-size:13px;cursor:pointer;color:var(--text);}
+.btn-secondary:hover{background:var(--bg2);}
+.btn-danger{padding:9px 18px;background:#E24B4A;color:#fff;border:none;border-radius:var(--r);font-size:13px;cursor:pointer;}
+.btn-danger:hover{opacity:.85;}
+
+/* ── Toggle ── */
+.toggle-wrap{display:flex;align-items:center;gap:10px;}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#ddd;border-radius:22px;cursor:pointer;transition:.2s;}
+.toggle-slider::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;}
+.toggle input:checked+.toggle-slider{background:var(--green);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px);}
+
+/* ── Status bar ── */
+.status-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--r);font-size:13px;margin-bottom:1rem;}
+.status-bar.active{background:var(--green-bg);color:var(--green-text);}
+.status-bar.inactive{background:#FCEBEB;color:#791F1F;}
+.status-bar.trial{background:var(--amber-bg);color:var(--amber-text);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 2s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Utility ── */
+.hidden{display:none!important;}
+.flex{display:flex;align-items:center;}
+.gap-8{gap:8px;}
+.gap-12{gap:12px;}
+.mb-8{margin-bottom:8px;}
+.mb-16{margin-bottom:16px;}
+.mb-24{margin-bottom:24px;}
+.text-sm{font-size:13px;}
+.text-xs{font-size:11px;}
+.text-muted{color:var(--text3);}
+.text-secondary{color:var(--text2);}
+.fw-600{font-weight:600;}
+
+@media(max-width:640px){
+  .sidebar{display:none;}
+  .form-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+}
+
+
+/* Single-file overrides */
+.page{display:none;}
+.page.active{display:block;}
+.code-block{background:#1a1a1a;color:#e8e8e8;border-radius:8px;padding:1rem;font-family:monospace;font-size:12px;line-height:1.6;overflow-x:auto;margin:.5rem 0 1rem;white-space:pre;}
+.setup-step{display:flex;gap:10px;margin-bottom:14px;font-size:13px;line-height:1.6;}
+.setup-step .num{width:22px;height:22px;border-radius:50%;background:#1a1a1a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px;}
+</style>
+</head>
+<body>
+
+<!-- ══ LANDING ══════════════════════════════════════════════ -->
+<div class="page active" id="p-landing">
+<nav class="nav"><div class="nav-inner">
+  <div class="logo">🕯 MailChef</div>
+  <div class="nav-links">
+    <a href="#" onclick="scrollTo2('pricing-sec')">Pricing</a>
+    <a onclick="goPage('p-login')" class="btn-outline-sm" style="cursor:pointer;">Log in</a>
+    <a onclick="goPage('p-register')" class="btn-sm" style="cursor:pointer;">Start free trial</a>
+  </div>
+</div></nav>
+
+<section class="hero"><div class="hero-inner">
+  <div class="hero-badge">AI-powered · For restaurants</div>
+  <h1>Your customers get emails<br>that feel <em>written for them</em></h1>
+  <p class="hero-sub">Connect your website or POS. MailChef reads your customers, analyzes their behavior, and automatically sends personalized emails — timed perfectly, unique every time.</p>
+  <div class="hero-actions">
+    <button class="btn-hero" onclick="goPage('p-register')">Get started — 14 days free</button>
+    <button class="btn-hero-ghost" onclick="scrollTo2('how-sec')">See how it works ↓</button>
+  </div>
+  <div class="hero-proof">Trusted by 40+ restaurants · No credit card required to start</div>
+</div></section>
+
+<section class="section" id="how-sec"><div class="section-inner">
+  <div class="section-label">How it works</div>
+  <h2>Three steps. Then it runs itself.</h2>
+  <div class="steps-grid">
+    <div class="step-card"><div class="step-num">1</div><div class="step-title">Connect your data</div><p>Paste your website URL or connect your POS. MailChef automatically reads your customer list, orders, and reservations.</p></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-title">AI analyzes each customer</div><p>Our AI profiles every customer — what they ordered, how often they visit, their personality type — and picks the perfect email for each one.</p></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-title">Emails send automatically</div><p>Set your sending interval and MailChef handles everything. Every email is unique, personal, and timed to convert.</p></div>
+  </div>
+</div></section>
+
+<section class="section section-alt"><div class="section-inner">
+  <div class="section-label">Features</div>
+  <h2>Everything your restaurant needs</h2>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">🔗</div><div class="feature-title">Auto data sync</div><p>Connects to your website, OpenTable, Square, Toast, Resy, or any custom system via URL or API.</p></div>
+    <div class="feature-card"><div class="feature-icon">🧠</div><div class="feature-title">Customer AI profiling</div><p>Detects personality types — loyalist, deal-seeker, adventurer, lapsed — and tailors email tone accordingly.</p></div>
+    <div class="feature-card"><div class="feature-icon">⏱</div><div class="feature-title">Scheduled sending</div><p>Set intervals — after a visit, weekly, monthly, birthdays. Emails go out automatically on schedule.</p></div>
+    <div class="feature-card"><div class="feature-icon">✉</div><div class="feature-title">Real, beautiful emails</div><p>Elegant restaurant-branded templates. No generic newsletters — every email reads like it was hand-written.</p></div>
+    <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-title">Analytics dashboard</div><p>See open rates, emails sent, customer segments, and which email types drive return visits.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔒</div><div class="feature-title">Subscription gating</div><p>Active subscription = active emails. If payment lapses, sending pauses automatically until renewed.</p></div>
+  </div>
+</div></section>
+
+<section class="section" id="pricing-sec"><div class="section-inner">
+  <div class="section-label">Pricing</div>
+  <h2>Simple monthly plans</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <div class="price-amount">$49<span>/mo</span></div>
+      <div class="price-desc">Perfect for small restaurants just getting started.</div>
+      <ul class="price-features"><li>Up to 500 customers</li><li>1 data source</li><li>Weekly auto-sending</li><li>AI profiling</li><li>Email support</li></ul>
+      <button class="btn-price" onclick="goPage('p-register','starter')">Start free trial</button>
+    </div>
+    <div class="price-card price-featured">
+      <div class="price-badge">Most popular</div>
+      <div class="price-tier">Professional</div>
+      <div class="price-amount">$99<span>/mo</span></div>
+      <div class="price-desc">For growing restaurants wanting full automation.</div>
+      <ul class="price-features"><li>Up to 2,500 customers</li><li>3 data sources</li><li>Daily auto-sending</li><li>Advanced AI profiling</li><li>Custom intervals</li><li>Analytics dashboard</li><li>Priority support</li></ul>
+      <button class="btn-price btn-price-featured" onclick="goPage('p-register','professional')">Start free trial</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-amount">$249<span>/mo</span></div>
+      <div class="price-desc">For restaurant groups and high-volume operations.</div>
+      <ul class="price-features"><li>Unlimited customers</li><li>Unlimited sources</li><li>Real-time sending</li><li>Custom AI training</li><li>White-label option</li><li>Dedicated manager</li></ul>
+      <button class="btn-price" onclick="goPage('p-register','enterprise')">Contact us</button>
+    </div>
+  </div>
+  <p class="pricing-note">All plans include a 14-day free trial. Emails pause automatically if subscription lapses.</p>
+</div></section>
+
+<footer class="footer"><div class="footer-inner">
+  <div class="footer-logo">🕯 MailChef</div>
+  <p class="footer-tagline">AI email automation built for restaurants.</p>
+  <div class="footer-links">
+    <a href="#" onclick="showSetupGuide()">Setup guide</a>
+    <a href="#" onclick="downloadBackend()">Download backend</a>
+    <a onclick="goPage('p-login')" style="cursor:pointer;">Admin login</a>
+  </div>
+  <p class="footer-copy">© 2026 MailChef. All rights reserved.</p>
+</div></footer>
+</div>
+
+<!-- ══ LOGIN ════════════════════════════════════════════════ -->
+<div class="page" id="p-login">
+<div class="auth-page"><div class="auth-card">
+  <div class="auth-logo">🕯 MailChef</div>
+  <div class="auth-title">Welcome back</div>
+  <div class="auth-sub">Log in to your restaurant dashboard</div>
+  <div id="login-err" class="hidden" style="background:#FCEBEB;color:#791F1F;padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;"></div>
+  <div class="auth-field"><div class="auth-label">Email address</div><input class="auth-input" type="email" id="login-email" placeholder="you@restaurant.com"/></div>
+  <div class="auth-field"><div class="auth-label">Password</div><input class="auth-input" type="password" id="login-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+  <button class="auth-btn" onclick="doLogin()">Log in</button>
+  <div class="auth-footer">No account? <a onclick="goPage('p-register')" style="cursor:pointer;">Start free trial</a></div>
+  <div class="auth-footer" style="margin-top:6px;"><a onclick="goPage('p-landing')" style="cursor:pointer;color:#999;">← Back to home</a></div>
+</div></div>
+</div>
+
+<!-- ══ REGISTER ═════════════════════════════════════════════ -->
+<div class="page" id="p-register">
+<div class="auth-page"><div class="auth-card">
+  <div class="auth-logo">🕯 MailChef</div>
+  <div class="auth-title">Start your free trial</div>
+  <div class="auth-sub">14 days free. No credit card required.</div>
+  <div id="reg-err" class="hidden" style="background:#FCEBEB;color:#791F1F;padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;"></div>
+  <div class="auth-field"><div class="auth-label">Restaurant name</div><input class="auth-input" type="text" id="reg-restaurant" placeholder="La Bella Cucina"/></div>
+  <div class="auth-field"><div class="auth-label">Your name</div><input class="auth-input" type="text" id="reg-name" placeholder="Your full name"/></div>
+  <div class="auth-field"><div class="auth-label">Email address</div><input class="auth-input" type="email" id="reg-email" placeholder="you@restaurant.com"/></div>
+  <div class="auth-field"><div class="auth-label">Password</div><input class="auth-input" type="password" id="reg-pw" placeholder="Min. 8 characters"/></div>
+  <div class="auth-field"><div class="auth-label">Plan</div>
+    <select class="auth-input" id="reg-plan">
+      <option value="starter">Starter — $49/mo</option>
+      <option value="professional" selected>Professional — $99/mo</option>
+      <option value="enterprise">Enterprise — $249/mo</option>
+    </select>
+  </div>
+  <button class="auth-btn" onclick="doRegister()">Create account</button>
+  <div class="auth-footer">Already have an account? <a onclick="goPage('p-login')" style="cursor:pointer;">Log in</a></div>
+  <div class="auth-footer" style="margin-top:6px;"><a onclick="goPage('p-landing')" style="cursor:pointer;color:#999;">← Back to home</a></div>
+</div></div>
+</div>
+
+<!-- ══ DASHBOARD ════════════════════════════════════════════ -->
+<div class="page" id="p-dashboard">
+<div class="dash-layout">
+  <div class="sidebar">
+    <div class="sidebar-logo">🕯 MailChef</div>
+    <div class="sidebar-item active" id="nav-overview"   onclick="showDash('overview')"><span class="icon">📊</span> Overview</div>
+    <div class="sidebar-item"        id="nav-connect"    onclick="showDash('connect')"><span class="icon">🔗</span> Data sources</div>
+    <div class="sidebar-item"        id="nav-customers"  onclick="showDash('customers')"><span class="icon">👥</span> Customers</div>
+    <div class="sidebar-item"        id="nav-automation" onclick="showDash('automation')"><span class="icon">⚡</span> Automation</div>
+    <div class="sidebar-item"        id="nav-emails"     onclick="showDash('emails')"><span class="icon">✉</span> Sent emails</div>
+    <div class="sidebar-item"        id="nav-billing"    onclick="showDash('billing')"><span class="icon">💳</span> Billing</div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-plan" id="sidebar-plan"><strong>Professional</strong><br>14 days left in trial</div>
+      <div class="sidebar-item" onclick="doLogout()" style="margin-top:8px;color:#999;cursor:pointer;"><span class="icon">↩</span> Log out</div>
+    </div>
+  </div>
+
+  <div class="dash-main">
+
+    <!-- OVERVIEW -->
+    <div id="dash-overview">
+      <div class="dash-header">
+        <div><div class="dash-title" id="dash-greet">Good morning 👋</div><div class="dash-sub" id="dash-rname">Loading...</div></div>
+        <div id="sub-badge"></div>
+      </div>
+      <div class="dash-content">
+        <div id="trial-banner" class="hidden" style="background:#FAEEDA;color:#633806;padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <span>⏱ Free trial ends in <strong id="trial-days">14</strong> days. Add payment to keep emails running.</span>
+          <button onclick="showDash('billing')" style="background:#633806;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap;">Add billing →</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Total customers</div><div class="stat-val" id="s-cust">–</div><div class="stat-note up" id="s-cust-note"></div></div>
+          <div class="stat-card"><div class="stat-label">Emails sent</div><div class="stat-val" id="s-sent">–</div><div class="stat-note">this month</div></div>
+          <div class="stat-card"><div class="stat-label">Open rate</div><div class="stat-val" id="s-open">–</div><div class="stat-note">avg. per campaign</div></div>
+          <div class="stat-card"><div class="stat-label">Next send</div><div class="stat-val" id="s-next">–</div><div class="stat-note">scheduled</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="panel"><div class="panel-head"><div class="panel-title">Customer segments</div></div><div id="seg-list"><div class="text-xs text-muted">Connect a source to see segments.</div></div></div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Recent emails</div><button class="panel-action" onclick="showDash('emails')">View all</button></div><div id="recent-list"><div class="text-xs text-muted">No emails sent yet.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECT -->
+    <div id="dash-connect" class="hidden">
+      <div class="dash-header"><div><div class="dash-title">Data sources</div><div class="dash-sub">Connect your website or POS to auto-import customers</div></div><button class="btn-primary" onclick="toggleSrcForm()">+ Add source</button></div>
+      <div class="dash-content">
+        <div id="src-form" class="panel hidden">
+          <div class="panel-title" style="margin-bottom:1rem;">Add data source</div>
+          <div class="form-grid">
+            <div class="form-field"><div class="form-label">Source type</div>
+              <select class="form-select" id="src-type" onchange="onSrcChange()">
+                <option value="website">Website URL (auto-scrape)</option>
+                <option value="opentable">OpenTable</option>
+                <option value="square">Square POS</option>
+                <option value="toast">Toast POS</option>
+                <option value="resy">Resy</option>
+                <option value="api">Custom API</option>
+              </select>
+            </div>
+            <div class="form-field"><div class="form-label">Source name</div><input class="form-input" type="text" id="src-name" placeholder="e.g. My Restaurant Website"/></div>
+            <div class="form-field form-field-full" id="src-url-row"><div class="form-label">Website URL or API endpoint</div><input class="form-input" type="text" id="src-url" placeholder="https://yourrestaurant.com"/></div>
+            <div class="form-field form-field-full hidden" id="src-key-row"><div class="form-label">API key / access token</div><input class="form-input" type="password" id="src-key" placeholder="Paste your API key here"/></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:1rem;">
+            <button class="btn-secondary" onclick="toggleSrcForm()">Cancel</button>
+            <button class="btn-primary" onclick="doAddSrc()">Connect source</button>
+          </div>
+        </div>
+        <div class="panel"><div class="panel-title" style="margin-bottom:1rem;">Connected sources</div><div id="src-list"><div class="text-xs text-muted">No sources yet.</div></div></div>
+        <div class="panel"><div class="panel-title" style="margin-bottom:.5rem;">How syncing works</div>
+          <p class="text-sm text-secondary" style="line-height:1.75;margin-bottom:.75rem;">When you add a website URL, MailChef's backend crawls the page and extracts customer data. For POS systems, the official API is used. All data syncs automatically on your chosen schedule.</p>
+          <p class="text-sm text-secondary" style="line-height:1.75;">The backend server must be running for syncing and email sending to work. <a href="#" onclick="showSetupGuide()" style="color:var(--text);font-weight:500;">See setup guide →</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="dash-customers" class="hidden">
+      <div class="dash-header"><div><div class="dash-title">Customers</div><div class="dash-sub">AI-analyzed profiles from your connected sources</div></div><button class="btn-primary" onclick="doSync()">Sync now</button></div>
+      <div class="dash-content">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Customer list</div><input class="form-input" type="text" placeholder="Search customers..." style="width:200px;" oninput="filterCust(this.value)"/></div>
+          <table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>AI type</th><th>Last visit</th><th>Emails sent</th><th>Status</th></tr></thead>
+          <tbody id="cust-tbody"><tr><td colspan="6" class="text-muted text-sm" style="padding:2rem;text-align:center;">Connect a data source to populate customers.</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTOMATION -->
+    <div id="dash-automation" class="hidden">
+      <div class="dash-header"><div><div class="dash-title">Automation</div><div class="dash-sub">Configure when and how emails send automatically</div></div></div>
+      <div class="dash-content">
+        <div id="auto-off" class="status-bar inactive hidden"><div class="status-dot"></div>Automation paused — subscription inactive. <a onclick="showDash('billing')" style="cursor:pointer;font-weight:600;color:inherit;margin-left:4px;">Renew →</a></div>
+        <div id="auto-on" class="status-bar active"><div class="status-dot"></div>Automation is active — emails sending on schedule</div>
+        <div class="panel">
+          <div class="panel-title" style="margin-bottom:1rem;">Send schedule</div>
+          <div class="form-grid" style="margin-bottom:1rem;">
+            <div class="form-field"><div class="form-label">Frequency</div><select class="form-select" id="af"><option value="after_visit">After every visit</option><option value="daily">Daily</option><option value="weekly" selected>Weekly</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Monthly</option></select></div>
+            <div class="form-field"><div class="form-label">Send time</div><select class="form-select" id="at"><option>9:00 AM</option><option selected>11:00 AM</option><option>2:00 PM</option><option>6:00 PM</option><option>7:00 PM</option></select></div>
+            <div class="form-field"><div class="form-label">Delay after visit</div><select class="form-select" id="ad"><option>Immediately</option><option selected>1 hour later</option><option>Same evening</option><option>Next morning</option><option>2 days later</option></select></div>
+            <div class="form-field"><div class="form-label">Max emails/customer/month</div><select class="form-select" id="am"><option>1</option><option selected>2</option><option>3</option><option>Unlimited</option></select></div>
+          </div>
+          <button class="btn-primary" onclick="doSaveAuto()">Save schedule</button>
+        </div>
+        <div class="panel">
+          <div class="panel-title" style="margin-bottom:1rem;">AI email types by customer segment</div>
+          <table class="data-table"><thead><tr><th>Customer type</th><th>How AI detects it</th><th>Email style</th><th>Active</th></tr></thead><tbody>
+            <tr><td><span class="badge badge-green">Loyalist</span></td><td class="text-secondary">3+ visits, consistent</td><td class="text-secondary">Warm, exclusive, VIP treatment</td><td><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+            <tr><td><span class="badge badge-amber">Deal-seeker</span></td><td class="text-secondary">Redeems offers, price-conscious</td><td class="text-secondary">Promotions, special discounts</td><td><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+            <tr><td><span class="badge badge-purple">Adventurer</span></td><td class="text-secondary">Orders variety, tries new dishes</td><td class="text-secondary">New menu, seasonal specials</td><td><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+            <tr><td><span class="badge badge-blue">Lapsed</span></td><td class="text-secondary">No visit in 30+ days</td><td class="text-secondary">Win-back, "we miss you"</td><td><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+            <tr><td><span class="badge badge-gray">New guest</span></td><td class="text-secondary">First or second visit</td><td class="text-secondary">Warm welcome email</td><td><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAILS -->
+    <div id="dash-emails" class="hidden">
+      <div class="dash-header"><div><div class="dash-title">Sent emails</div><div class="dash-sub">Every email MailChef has sent for your restaurant</div></div></div>
+      <div class="dash-content"><div class="panel"><table class="data-table"><thead><tr><th>Customer</th><th>Subject</th><th>Type</th><th>Sent</th><th>Status</th></tr></thead>
+      <tbody id="emails-tbody"><tr><td colspan="5" class="text-muted text-sm" style="padding:2rem;text-align:center;">No emails sent yet.</td></tr></tbody></table></div></div>
+    </div>
+
+    <!-- BILLING -->
+    <div id="dash-billing" class="hidden">
+      <div class="dash-header"><div><div class="dash-title">Billing</div><div class="dash-sub">Manage your subscription</div></div></div>
+      <div class="dash-content">
+        <div class="panel"><div class="panel-title" style="margin-bottom:1rem;">Current plan</div><div id="bill-info"></div></div>
+        <div class="panel">
+          <div class="panel-title" style="margin-bottom:1rem;">Payment method</div>
+          <div class="form-grid" style="margin-bottom:1rem;">
+            <div class="form-field"><div class="form-label">Card number</div><input class="form-input" type="text" id="cnum" placeholder="4242 4242 4242 4242" maxlength="19" oninput="fmtCard(this)"/></div>
+            <div class="form-field"><div class="form-label">Cardholder name</div><input class="form-input" type="text" id="cname" placeholder="Name on card"/></div>
+            <div class="form-field"><div class="form-label">Expiry (MM/YY)</div><input class="form-input" type="text" id="cexp" placeholder="MM/YY" maxlength="5"/></div>
+            <div class="form-field"><div class="form-label">CVC</div><input class="form-input" type="text" id="ccvc" placeholder="123" maxlength="4"/></div>
+          </div>
+          <button class="btn-primary" onclick="doSaveBill()">Save payment method</button>
+        </div>
+        <div class="panel" style="border-color:#F09595;">
+          <div class="panel-title" style="margin-bottom:.5rem;color:#A32D2D;">Danger zone</div>
+          <p class="text-sm text-secondary" style="margin-bottom:1rem;">Cancelling immediately pauses all automated emails. You can re-subscribe anytime.</p>
+          <button class="btn-danger" onclick="doCancelSub()">Cancel subscription</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══ SETUP MODAL ══════════════════════════════════════════ -->
+<div id="setup-modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:flex;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto;">
+<div style="background:#fff;border-radius:12px;padding:2rem;max-width:560px;width:100%;margin:auto;">
+  <h3 style="font-size:16px;font-weight:600;margin-bottom:1rem;">🚀 Setup guide — run MailChef</h3>
+  <p class="text-sm text-secondary" style="margin-bottom:1.25rem;line-height:1.75;">This HTML file is your complete frontend. To enable real email sending, customer syncing, and data storage you also need to run the backend server.</p>
+  <div class="setup-step"><div class="num">1</div><div><strong>Download the backend</strong> — click the button below to get <code>setup-mailchef-backend.sh</code></div></div>
+  <div class="setup-step"><div class="num">2</div><div><strong>Run the setup script</strong> — it creates all backend files automatically:<div class="code-block">bash setup-mailchef-backend.sh
+cd mailchef-backend
+npm install</div></div></div>
+  <div class="setup-step"><div class="num">3</div><div><strong>Create a <code>.env</code> file</strong> in the backend folder:<div class="code-block">ANTHROPIC_API_KEY=sk-ant-your-key-here
+RESEND_API_KEY=re_your-key-here
+JWT_SECRET=any-long-random-string
+PORT=4000</div>
+    Get keys free at <strong>console.anthropic.com</strong> and <strong>resend.com</strong></div></div>
+  <div class="setup-step"><div class="num">4</div><div><strong>Start the server:</strong><div class="code-block">node server.js</div>You'll see: <em>🕯 MailChef SaaS running on http://localhost:4000</em></div></div>
+  <div class="setup-step"><div class="num">5</div><div><strong>Open MailChef.html</strong> in your browser — register an account, connect a data source, and you're live.</div></div>
+  <div class="setup-step"><div class="num">6</div><div><strong>To go fully live online:</strong> Deploy the backend folder to <strong>Railway.app</strong> or <strong>Render.com</strong> (both free to start). Then open MailChef.html in a text editor, find <code>localhost:4000</code> and replace with your live URL.</div></div>
+  <div style="display:flex;gap:8px;margin-top:1.5rem;">
+    <button class="btn-primary" onclick="downloadBackend()">Download backend setup script</button>
+    <button class="btn-secondary" onclick="document.getElementById('setup-modal').classList.add('hidden')">Close</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ── Backend files (embedded for download) ─────────────────
+const BACKEND_FILES = {"backend/package.json": "{\n  \"name\": \"mailchef-saas-backend\",\n  \"version\": \"1.0.0\",\n  \"description\": \"MailChef — AI restaurant email SaaS backend\",\n  \"main\": \"server.js\",\n  \"scripts\": {\n    \"start\": \"node server.js\",\n    \"dev\": \"nodemon server.js\"\n  },\n  \"dependencies\": {\n    \"bcryptjs\": \"^2.4.3\",\n    \"better-sqlite3\": \"^9.4.3\",\n    \"cors\": \"^2.8.5\",\n    \"express\": \"^4.18.2\",\n    \"jsonwebtoken\": \"^9.0.2\",\n    \"node-cron\": \"^3.0.3\",\n    \"resend\": \"^3.2.0\",\n    \"uuid\": \"^9.0.0\"\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.0.1\"\n  }\n}\n", "backend/server.js": "// ── MailChef SaaS Backend ──────────────────────────────────\n// Run: node server.js\n// Requires: npm install\n\nconst express    = require('express');\nconst cors       = require('cors');\nconst cron       = require('node-cron');\nconst path       = require('path');\n\nconst authRoutes       = require('./routes/auth');\nconst dashRoutes       = require('./routes/dashboard');\nconst customerRoutes   = require('./routes/customers');\nconst sourceRoutes     = require('./routes/sources');\nconst emailRoutes      = require('./routes/emails');\nconst billingRoutes    = require('./routes/billing');\nconst automationRoutes = require('./routes/automation');\n\nconst { runAutomation } = require('./services/automation');\nconst db                = require('./database/db');\n\nconst app  = express();\nconst PORT = process.env.PORT || 4000;\n\n// ── Middleware ─────────────────────────────────────────────\napp.use(cors({ origin: '*' }));\napp.use(express.json());\n\n// ── API Routes ─────────────────────────────────────────────\napp.use('/auth',       authRoutes);\napp.use('/dashboard',  dashRoutes);\napp.use('/customers',  customerRoutes);\napp.use('/sources',    sourceRoutes);\napp.use('/emails',     emailRoutes);\napp.use('/billing',    billingRoutes);\napp.use('/automation', automationRoutes);\n\n// Health check\napp.get('/health', (req, res) => res.json({ status: 'ok', time: new Date() }));\n\n// ── Cron jobs ──────────────────────────────────────────────\n// Run automation every hour — checks each client's schedule\ncron.schedule('0 * * * *', async () => {\n  console.log('[CRON] Running hourly automation check...');\n  try { await runAutomation(); }\n  catch(e) { console.error('[CRON] Error:', e.message); }\n});\n\n// Sync data sources every 6 hours\ncron.schedule('0 */6 * * *', async () => {\n  console.log('[CRON] Syncing data sources...');\n  const { syncAllSources } = require('./services/dataSyncer');\n  try { await syncAllSources(); }\n  catch(e) { console.error('[CRON] Sync error:', e.message); }\n});\n\n// ── Start ──────────────────────────────────────────────────\ndb.init().then(() => {\n  app.listen(PORT, () => {\n    console.log(`\\n🕯  MailChef SaaS backend running on http://localhost:${PORT}`);\n    console.log(`   Auth:       POST /auth/register, /auth/login`);\n    console.log(`   Dashboard:  GET  /dashboard/stats`);\n    console.log(`   Customers:  GET  /customers`);\n    console.log(`   Sources:    GET/POST /sources`);\n    console.log(`   Billing:    GET  /billing/status`);\n    console.log(`   Automation: POST /automation/settings\\n`);\n  });\n}).catch(e => { console.error('DB init failed:', e); process.exit(1); });\n", "backend/database/db.js": "// database/db.js — SQLite via better-sqlite3\nconst Database = require('better-sqlite3');\nconst path     = require('path');\n\nconst DB_PATH = path.join(__dirname, 'mailchef.db');\nlet db;\n\nfunction init() {\n  return new Promise((resolve, reject) => {\n    try {\n      db = new Database(DB_PATH);\n      db.pragma('journal_mode = WAL');\n      db.pragma('foreign_keys = ON');\n      createTables();\n      resolve(db);\n    } catch(e) { reject(e); }\n  });\n}\n\nfunction createTables() {\n  db.exec(`\n    CREATE TABLE IF NOT EXISTS clients (\n      id            TEXT PRIMARY KEY,\n      restaurant    TEXT NOT NULL,\n      name          TEXT NOT NULL,\n      email         TEXT UNIQUE NOT NULL,\n      password_hash TEXT NOT NULL,\n      plan          TEXT DEFAULT 'starter',\n      status        TEXT DEFAULT 'trial',\n      trial_ends    TEXT,\n      billing_card  TEXT,\n      automation    TEXT DEFAULT '{}',\n      created_at    TEXT DEFAULT (datetime('now'))\n    );\n\n    CREATE TABLE IF NOT EXISTS sources (\n      id          TEXT PRIMARY KEY,\n      client_id   TEXT NOT NULL,\n      type        TEXT NOT NULL,\n      name        TEXT NOT NULL,\n      url         TEXT,\n      api_key     TEXT,\n      status      TEXT DEFAULT 'pending',\n      last_synced TEXT,\n      created_at  TEXT DEFAULT (datetime('now')),\n      FOREIGN KEY(client_id) REFERENCES clients(id)\n    );\n\n    CREATE TABLE IF NOT EXISTS customers (\n      id            TEXT PRIMARY KEY,\n      client_id     TEXT NOT NULL,\n      source_id     TEXT,\n      name          TEXT NOT NULL,\n      email         TEXT NOT NULL,\n      phone         TEXT,\n      last_purchase TEXT,\n      order_history TEXT DEFAULT '[]',\n      dietary       TEXT,\n      ai_type       TEXT DEFAULT 'new_guest',\n      ai_notes      TEXT,\n      emails_sent   INTEGER DEFAULT 0,\n      subscribed    INTEGER DEFAULT 1,\n      created_at    TEXT DEFAULT (datetime('now')),\n      FOREIGN KEY(client_id) REFERENCES clients(id)\n    );\n\n    CREATE TABLE IF NOT EXISTS emails (\n      id            TEXT PRIMARY KEY,\n      client_id     TEXT NOT NULL,\n      customer_id   TEXT NOT NULL,\n      customer_name TEXT,\n      email_type    TEXT,\n      subject       TEXT,\n      html_body     TEXT,\n      sent_at       TEXT DEFAULT (datetime('now')),\n      opened        INTEGER DEFAULT 0,\n      FOREIGN KEY(client_id) REFERENCES clients(id),\n      FOREIGN KEY(customer_id) REFERENCES customers(id)\n    );\n  `);\n}\n\nfunction get()    { return db; }\nfunction query(sql, params=[]) { return db.prepare(sql).all(...params); }\nfunction run(sql, params=[])   { return db.prepare(sql).run(...params); }\nfunction one(sql, params=[])   { return db.prepare(sql).get(...params); }\n\nmodule.exports = { init, get, query, run, one };\n", "backend/middleware/auth.js": "// middleware/auth.js\nconst jwt = require('jsonwebtoken');\nconst JWT_SECRET = process.env.JWT_SECRET || 'mailchef-secret-change-in-production';\n\nfunction requireAuth(req, res, next) {\n  const header = req.headers.authorization;\n  if (!header || !header.startsWith('Bearer ')) {\n    return res.status(401).json({ error: 'No token provided' });\n  }\n  try {\n    const token   = header.split(' ')[1];\n    req.client    = jwt.verify(token, JWT_SECRET);\n    next();\n  } catch(e) {\n    return res.status(401).json({ error: 'Invalid or expired token' });\n  }\n}\n\nmodule.exports = { requireAuth, JWT_SECRET };\n", "backend/services/aiEngine.js": "// services/aiEngine.js\n// Analyzes customers and generates personalized emails using Claude\n\nconst ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || 'YOUR_ANTHROPIC_API_KEY';\n\n// ── Analyze a customer and assign AI type + notes ──────────\nasync function analyzeCustomer(customer, restaurantName) {\n  const prompt = `You are an expert customer analyst for a restaurant called \"${restaurantName}\".\n\nAnalyze this customer and respond ONLY with JSON (no extra text):\n\nCustomer data:\n- Name: ${customer.name}\n- Order history: ${JSON.stringify(customer.orderHistory || [])}\n- Last visit: ${customer.lastPurchase || 'Unknown'}\n- Dietary: ${customer.dietary || 'None noted'}\n- Total visits: ${customer.totalVisits || 1}\n\nRespond with exactly this JSON structure:\n{\n  \"aiType\": \"loyalist|deal_seeker|adventurer|lapsed|new_guest\",\n  \"personality\": \"2-3 sentence description of this customer's personality and dining style\",\n  \"emailTone\": \"warm_exclusive|promotional|discovery|winback|welcoming\",\n  \"keyTopics\": [\"topic1\", \"topic2\"],\n  \"bestOffer\": \"a specific offer or hook that would resonate with this customer\"\n}\n\nRules for aiType:\n- loyalist: 3+ visits, consistent, loves the restaurant\n- deal_seeker: responds to offers, cost-conscious, redeems promotions\n- adventurer: orders variety, tries new dishes, food-curious\n- lapsed: hasn't visited in 30+ days\n- new_guest: first or second visit only`;\n\n  const raw = await callClaude(prompt, 300);\n  try {\n    const clean = raw.replace(/```json|```/g, '').trim();\n    return JSON.parse(clean);\n  } catch(e) {\n    return { aiType: 'new_guest', personality: '', emailTone: 'welcoming', keyTopics: [], bestOffer: '' };\n  }\n}\n\n// ── Generate a personalized email for a customer ───────────\nasync function generatePersonalizedEmail(customer, client, emailType) {\n  const analysis = customer.aiNotes ? JSON.parse(customer.aiNotes) : {};\n\n  const typeInstructions = {\n    welcome:        `Write a warm, elegant welcome email for their first visit.`,\n    reservation:    `Write a refined reservation confirmation email.`,\n    winback:        `Write a genuine \"we miss you\" email to bring them back. Mention something specific from their history.`,\n    loyalist:       `Write an exclusive VIP appreciation email. Make them feel like a cherished regular.`,\n    promo:          `Write a personalized promotion email. The offer: ${analysis.bestOffer || 'a special chef\\'s tasting experience'}. Make it feel exclusive, not generic.`,\n    adventurer:     `Write an exciting email about a new seasonal menu or dish they'd love based on their adventurous palate.`,\n    post_dining:    `Write a heartfelt post-dining thank you. Reference something specific about their experience.`,\n  };\n\n  const prompt = `You are the maître d' of \"${client.restaurant}\", a fine dining restaurant.\n\nCustomer profile:\n- Name: ${customer.name}\n- Personality: ${analysis.personality || 'A valued guest'}\n- AI type: ${customer.aiType || 'new_guest'}\n- Favorite orders: ${JSON.stringify((customer.orderHistory || []).slice(0, 3))}\n- Last visit: ${customer.lastPurchase || 'recently'}\n- Dietary: ${customer.dietary || 'no restrictions'}\n- Key topics that resonate: ${JSON.stringify(analysis.keyTopics || [])}\n\nTask: ${typeInstructions[emailType] || typeInstructions.welcome}\n\nFormat your response EXACTLY like this:\nSUBJECT: [subject line]\nGREETING: [opening line addressing them personally]\nPARA1: [first body paragraph — highly personal]\nPARA2: [second paragraph — practical or evocative]\n${analysis.bestOffer || emailType==='promo' ? 'PARA3: [offer or call to action paragraph]\\n' : ''}CTA_TEXT: [button text]\nSIGN_NAME: [a human name for the maître d']\nSIGN_TITLE: [their title]\n\nRules: Sophisticated yet warm. No emojis. Under 150 words in body. Feel genuinely written by a person. Reference their specific tastes and history naturally.`;\n\n  const raw = await callClaude(prompt, 600);\n  return parseEmailResponse(raw);\n}\n\n// ── Parse Claude's structured email response ───────────────\nfunction parseEmailResponse(text) {\n  const get = (key) => {\n    const m = text.match(new RegExp(key + ':\\\\s*(.+?)(?=\\\\n[A-Z_]+:|$)', 's'));\n    return m ? m[1].trim() : '';\n  };\n  return {\n    subject:  get('SUBJECT'),\n    greeting: get('GREETING'),\n    para1:    get('PARA1'),\n    para2:    get('PARA2'),\n    para3:    get('PARA3'),\n    ctaText:  get('CTA_TEXT') || 'We look forward to welcoming you',\n    signName: get('SIGN_NAME') || 'The Team',\n    signTitle:get('SIGN_TITLE') || 'Restaurant',\n  };\n}\n\n// ── Render HTML email from parsed data ─────────────────────\nfunction renderEmailHtml(parsed, customer, client) {\n  const name = customer.name;\n  return `<!DOCTYPE html>\n<html lang=\"en\">\n<head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"/>\n<title>${parsed.subject}</title>\n<style>\nbody{margin:0;padding:0;background:#f0ede8;font-family:Georgia,serif;}\n.outer{padding:40px 20px;}\n.wrap{max-width:580px;margin:0 auto;}\n.card{background:#fff;border:1px solid #e8e4dc;border-radius:8px;overflow:hidden;}\n.hdr{text-align:center;padding:2rem 1.5rem 1.5rem;border-bottom:1px solid #e8e4dc;background:#faf9f7;}\n.rname{font-family:-apple-system,sans-serif;font-size:10px;letter-spacing:.2em;color:#999;text-transform:uppercase;margin-bottom:10px;}\n.greeting{font-size:22px;font-weight:400;color:#1a1a1a;line-height:1.4;}\n.body{padding:1.75rem;}\n.p{font-size:14px;line-height:1.85;color:#444;margin-bottom:1rem;}\n.divider{height:1px;background:#e8e4dc;margin:1.25rem 0;}\n.cta-wrap{text-align:center;margin:1.5rem 0;}\n.cta{display:inline-block;background:#1a1a1a;color:#fff;padding:13px 30px;border-radius:6px;font-family:-apple-system,sans-serif;font-size:13px;letter-spacing:.04em;text-decoration:none;}\n.footer{text-align:center;padding:1.25rem 1.5rem 1.75rem;border-top:1px solid #e8e4dc;background:#faf9f7;}\n.sign{font-family:-apple-system,sans-serif;font-size:12px;color:#888;margin-bottom:2px;}\n.tagline{font-size:11px;color:#c0b8ae;font-style:italic;}\n.unsub{font-family:-apple-system,sans-serif;font-size:11px;color:#ccc;margin-top:1rem;}\n</style>\n</head>\n<body>\n<div class=\"outer\"><div class=\"wrap\">\n<div class=\"card\">\n  <div class=\"hdr\">\n    <div class=\"rname\">${client.restaurant}</div>\n    <div class=\"greeting\">${parsed.greeting || 'Dear ' + customer.name.split(' ')[0] + ','}</div>\n  </div>\n  <div class=\"body\">\n    ${parsed.para1 ? `<p class=\"p\">${parsed.para1}</p>` : ''}\n    ${parsed.para2 ? `<p class=\"p\">${parsed.para2}</p>` : ''}\n    ${parsed.para3 ? `<p class=\"p\">${parsed.para3}</p>` : ''}\n    <div class=\"cta-wrap\"><a href=\"#\" class=\"cta\">${parsed.ctaText}</a></div>\n    <div class=\"divider\"></div>\n    <p class=\"p\" style=\"font-size:13px;color:#999;\">Questions? Reach us at ${client.email} — we'd love to hear from you.</p>\n  </div>\n  <div class=\"footer\">\n    <div class=\"sign\">${parsed.signName} · ${parsed.signTitle}</div>\n    <div class=\"tagline\">\"Where every evening becomes a memory.\"</div>\n    <div class=\"unsub\">You're receiving this because you dined with us. <a href=\"#\" style=\"color:#ccc;\">Unsubscribe</a></div>\n  </div>\n</div>\n</div></div>\n</body></html>`;\n}\n\n// ── Call Claude API ────────────────────────────────────────\nasync function callClaude(prompt, maxTokens = 600) {\n  const resp = await fetch('https://api.anthropic.com/v1/messages', {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'x-api-key': ANTHROPIC_API_KEY,\n      'anthropic-version': '2023-06-01',\n    },\n    body: JSON.stringify({\n      model: 'claude-sonnet-4-20250514',\n      max_tokens: maxTokens,\n      messages: [{ role: 'user', content: prompt }],\n    }),\n  });\n  const data = await resp.json();\n  if (!resp.ok) throw new Error(`Claude API error: ${data.error?.message}`);\n  return data.content.map(b => b.text || '').join('');\n}\n\nmodule.exports = { analyzeCustomer, generatePersonalizedEmail, renderEmailHtml };\n", "backend/services/dataSyncer.js": "// services/dataSyncer.js\n// Syncs customer data from connected sources (website scraping, POS APIs, CSV)\n\nconst db   = require('../database/db');\nconst { v4: uuid } = require('uuid');\nconst { analyzeCustomer } = require('./aiEngine');\n\nasync function syncAllSources() {\n  const sources = db.query(`SELECT * FROM sources WHERE status != 'removed'`);\n  for (const source of sources) {\n    try {\n      await syncSource(source);\n    } catch(e) {\n      console.error(`[SYNC] Failed for source ${source.name}:`, e.message);\n    }\n  }\n}\n\nasync function syncSource(source) {\n  const client = db.one('SELECT * FROM clients WHERE id = ?', [source.client_id]);\n  if (!client) return;\n\n  console.log(`[SYNC] Syncing ${source.name} (${source.type}) for ${client.restaurant}`);\n\n  let rawCustomers = [];\n\n  switch(source.type) {\n    case 'website':\n      rawCustomers = await scrapeWebsite(source.url);\n      break;\n    case 'opentable':\n      rawCustomers = await syncOpenTable(source.url, source.api_key);\n      break;\n    case 'square':\n      rawCustomers = await syncSquare(source.api_key);\n      break;\n    case 'toast':\n      rawCustomers = await syncToast(source.url, source.api_key);\n      break;\n    case 'api':\n      rawCustomers = await syncCustomApi(source.url, source.api_key);\n      break;\n    default:\n      return;\n  }\n\n  let added = 0;\n  for (const raw of rawCustomers) {\n    if (!raw.email) continue;\n\n    // Check if customer already exists\n    const existing = db.one('SELECT id FROM customers WHERE client_id = ? AND email = ?',\n      [source.client_id, raw.email]);\n\n    if (!existing) {\n      // New customer — analyze and insert\n      let aiType = 'new_guest';\n      let aiNotes = null;\n\n      try {\n        const analysis = await analyzeCustomer({\n          name: raw.name,\n          orderHistory: raw.orderHistory || [],\n          lastPurchase: raw.lastPurchase,\n          dietary: raw.dietary,\n          totalVisits: raw.totalVisits,\n        }, client.restaurant);\n        aiType  = analysis.aiType;\n        aiNotes = JSON.stringify(analysis);\n      } catch(e) { /* use defaults */ }\n\n      db.run(`\n        INSERT INTO customers\n          (id,client_id,source_id,name,email,phone,last_purchase,order_history,dietary,ai_type,ai_notes)\n        VALUES (?,?,?,?,?,?,?,?,?,?,?)\n      `, [\n        uuid(), source.client_id, source.id,\n        raw.name, raw.email, raw.phone || null,\n        raw.lastPurchase || null,\n        JSON.stringify(raw.orderHistory || []),\n        raw.dietary || null,\n        aiType, aiNotes\n      ]);\n      added++;\n    } else if (raw.lastPurchase) {\n      // Update last purchase if newer\n      db.run('UPDATE customers SET last_purchase = ? WHERE id = ?',\n        [raw.lastPurchase, existing.id]);\n    }\n  }\n\n  db.run('UPDATE sources SET last_synced = datetime(\"now\"), status = \"active\" WHERE id = ?',\n    [source.id]);\n\n  console.log(`[SYNC] ${source.name}: +${added} new customers (${rawCustomers.length} total)`);\n}\n\n// ── Website scraper ────────────────────────────────────────\n// In production, use Puppeteer or a scraping API like Apify/Browserless\nasync function scrapeWebsite(url) {\n  try {\n    // Fetch the page HTML\n    const resp = await fetch(url, { headers: { 'User-Agent': 'MailChef-Bot/1.0' } });\n    const html = await resp.text();\n\n    // Extract emails using regex (basic — in production use Puppeteer for JS-rendered sites)\n    const emailRegex = /[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/g;\n    const emails     = [...new Set(html.match(emailRegex) || [])];\n\n    // Extract names near emails (heuristic)\n    return emails\n      .filter(e => !e.includes('example') && !e.includes('noreply'))\n      .slice(0, 50)\n      .map(email => ({\n        name:  capitalizeEmail(email),\n        email: email,\n        orderHistory: [],\n        lastPurchase: null,\n      }));\n  } catch(e) {\n    console.error('[SCRAPE] Error:', e.message);\n    return [];\n  }\n}\n\n// ── OpenTable API ──────────────────────────────────────────\nasync function syncOpenTable(restaurantId, apiKey) {\n  // OpenTable Connect API — requires partner access\n  try {\n    const resp = await fetch(`https://platform.otqa.com/v2/restaurants/${restaurantId}/reservations`, {\n      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }\n    });\n    const data = await resp.json();\n    return (data.reservations || []).map(r => ({\n      name:         `${r.first_name} ${r.last_name}`,\n      email:        r.email,\n      phone:        r.phone,\n      lastPurchase: r.reservation_date,\n      orderHistory: r.special_requests ? [r.special_requests] : [],\n      dietary:      r.dietary_restrictions || null,\n    }));\n  } catch(e) { return []; }\n}\n\n// ── Square POS ─────────────────────────────────────────────\nasync function syncSquare(accessToken) {\n  try {\n    const resp = await fetch('https://connect.squareup.com/v2/customers', {\n      headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' }\n    });\n    const data = await resp.json();\n    return (data.customers || []).map(c => ({\n      name:         `${c.given_name || ''} ${c.family_name || ''}`.trim(),\n      email:        c.email_address,\n      phone:        c.phone_number,\n      lastPurchase: c.updated_at?.slice(0,10),\n      orderHistory: c.preferences?.fiscal_month_items || [],\n      totalVisits:  c.segment_ids?.length || 1,\n    }));\n  } catch(e) { return []; }\n}\n\n// ── Toast POS ─────────────────────────────────────────────\nasync function syncToast(apiUrl, apiKey) {\n  try {\n    const resp = await fetch(`${apiUrl}/guests`, {\n      headers: { 'Authorization': `Bearer ${apiKey}` }\n    });\n    const data = await resp.json();\n    return (data || []).map(g => ({\n      name:         `${g.firstName || ''} ${g.lastName || ''}`.trim(),\n      email:        g.email,\n      phone:        g.phone,\n      lastPurchase: g.lastOrder?.date,\n      orderHistory: (g.orders || []).map(o => o.itemName).slice(0,10),\n    }));\n  } catch(e) { return []; }\n}\n\n// ── Custom API ─────────────────────────────────────────────\nasync function syncCustomApi(url, apiKey) {\n  try {\n    const headers = { 'Content-Type': 'application/json' };\n    if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;\n    const resp = await fetch(url, { headers });\n    const data = await resp.json();\n    // Support flat array or { customers: [...] }\n    const list = Array.isArray(data) ? data : (data.customers || data.data || []);\n    return list.map(c => ({\n      name:         c.name || c.full_name || `${c.firstName||''} ${c.lastName||''}`.trim(),\n      email:        c.email || c.email_address,\n      phone:        c.phone || c.phone_number,\n      lastPurchase: c.lastVisit || c.last_order_date || c.last_purchase,\n      orderHistory: c.orders || c.purchases || [],\n      dietary:      c.dietary || c.dietary_restrictions,\n      totalVisits:  c.totalVisits || c.visit_count || 1,\n    }));\n  } catch(e) { return []; }\n}\n\n// ── Import from CSV array (called by route) ────────────────\nasync function importFromCSV(rows, clientId, sourceId, restaurantName) {\n  let added = 0;\n  for (const row of rows) {\n    if (!row.email) continue;\n    const existing = db.one('SELECT id FROM customers WHERE client_id = ? AND email = ?',\n      [clientId, row.email]);\n    if (existing) continue;\n\n    let aiType = 'new_guest', aiNotes = null;\n    try {\n      const a = await analyzeCustomer({ name: row.name, orderHistory: [], lastPurchase: row.last_visit, dietary: row.dietary }, restaurantName);\n      aiType = a.aiType; aiNotes = JSON.stringify(a);\n    } catch(e) {}\n\n    db.run(`INSERT INTO customers (id,client_id,source_id,name,email,phone,last_purchase,dietary,ai_type,ai_notes)\n            VALUES (?,?,?,?,?,?,?,?,?,?)`,\n      [uuid(), clientId, sourceId, row.name, row.email, row.phone||null, row.last_visit||null, row.dietary||null, aiType, aiNotes]);\n    added++;\n  }\n  return added;\n}\n\nfunction capitalizeEmail(email) {\n  const local = email.split('@')[0];\n  return local.split(/[._-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');\n}\n\nmodule.exports = { syncAllSources, syncSource, importFromCSV };\n", "backend/services/automation.js": "// services/automation.js\n// Runs every hour. For each active client, checks if it's time to send emails.\n\nconst db           = require('../database/db');\nconst { analyzeCustomer, generatePersonalizedEmail, renderEmailHtml } = require('./aiEngine');\nconst { sendEmail } = require('./emailSender');\nconst { v4: uuid } = require('uuid');\n\nasync function runAutomation() {\n  // Get all active clients (active subscription or valid trial)\n  const clients = db.query(`\n    SELECT * FROM clients\n    WHERE status = 'active'\n       OR (status = 'trial' AND trial_ends > datetime('now'))\n  `);\n\n  console.log(`[AUTO] Processing ${clients.length} active client(s)...`);\n\n  for (const client of clients) {\n    try {\n      await processClient(client);\n    } catch(e) {\n      console.error(`[AUTO] Error for client ${client.restaurant}:`, e.message);\n    }\n  }\n}\n\nasync function processClient(client) {\n  const settings = JSON.parse(client.automation || '{}');\n  const freq     = settings.frequency || 'weekly';\n  const sendTime = settings.sendTime   || '11:00 AM';\n  const maxPerMonth = parseInt(settings.maxPerMonth) || 2;\n\n  // Check if it's time to send based on frequency\n  if (!shouldSendNow(freq, sendTime)) return;\n\n  // Get customers for this client who are due for an email\n  const customers = db.query(`\n    SELECT * FROM customers\n    WHERE client_id = ? AND subscribed = 1\n  `, [client.id]);\n\n  let sent = 0;\n  for (const customer of customers) {\n    try {\n      // Check emails sent this month\n      const thisMonth = db.one(`\n        SELECT COUNT(*) as count FROM emails\n        WHERE client_id = ? AND customer_id = ?\n          AND sent_at > datetime('now', 'start of month')\n      `, [client.id, customer.id]);\n\n      if (thisMonth.count >= maxPerMonth) continue;\n\n      // Determine email type based on AI analysis\n      const emailType = resolveEmailType(customer, settings);\n\n      // Re-analyze if needed\n      let aiNotes = customer.ai_notes;\n      if (!aiNotes) {\n        const analysis = await analyzeCustomer({\n          name: customer.name,\n          orderHistory: JSON.parse(customer.order_history || '[]'),\n          lastPurchase: customer.last_purchase,\n          dietary: customer.dietary,\n        }, client.restaurant);\n        aiNotes = JSON.stringify(analysis);\n        db.run('UPDATE customers SET ai_type = ?, ai_notes = ? WHERE id = ?',\n          [analysis.aiType, aiNotes, customer.id]);\n      }\n\n      // Generate personalized email\n      const parsed = await generatePersonalizedEmail(\n        { ...customer, aiNotes, orderHistory: JSON.parse(customer.order_history || '[]') },\n        client,\n        emailType\n      );\n\n      const html = renderEmailHtml(parsed, customer, client);\n\n      // Send email\n      await sendEmail({\n        to:      customer.email,\n        subject: parsed.subject,\n        html,\n        from:    `${client.restaurant} <noreply@mailchef.app>`,\n      });\n\n      // Log email\n      db.run(`\n        INSERT INTO emails (id,client_id,customer_id,customer_name,email_type,subject,html_body)\n        VALUES (?,?,?,?,?,?,?)\n      `, [uuid(), client.id, customer.id, customer.name, emailType, parsed.subject, html]);\n\n      // Update customer email count\n      db.run('UPDATE customers SET emails_sent = emails_sent + 1 WHERE id = ?', [customer.id]);\n\n      sent++;\n      console.log(`[AUTO] Sent ${emailType} to ${customer.name} (${client.restaurant})`);\n\n      // Throttle — wait 1s between emails\n      await sleep(1000);\n    } catch(e) {\n      console.error(`[AUTO] Failed for customer ${customer.name}:`, e.message);\n    }\n  }\n\n  if (sent > 0) console.log(`[AUTO] ${client.restaurant}: sent ${sent} emails`);\n}\n\n// ── Determine email type for a customer ────────────────────\nfunction resolveEmailType(customer, settings) {\n  const aiType = customer.ai_type || 'new_guest';\n\n  // Days since last purchase\n  let daysSince = 999;\n  if (customer.last_purchase) {\n    daysSince = Math.floor((Date.now() - new Date(customer.last_purchase)) / (1000*60*60*24));\n  }\n\n  if (customer.emails_sent === 0)    return 'welcome';\n  if (daysSince > 30)                return 'winback';\n  if (aiType === 'loyalist')         return 'loyalist';\n  if (aiType === 'deal_seeker')      return 'promo';\n  if (aiType === 'adventurer')       return 'adventurer';\n  if (aiType === 'lapsed')           return 'winback';\n  return 'welcome';\n}\n\n// ── Frequency check ────────────────────────────────────────\nfunction shouldSendNow(freq, sendTime) {\n  const now  = new Date();\n  const hour = now.getHours();\n\n  // Parse send time hour\n  const timeMatch = sendTime.match(/(\\d+):00\\s*(AM|PM)/i);\n  let targetHour = timeMatch ? parseInt(timeMatch[1]) : 11;\n  if (timeMatch?.[2]?.toUpperCase() === 'PM' && targetHour !== 12) targetHour += 12;\n\n  if (hour !== targetHour) return false;\n\n  const day = now.getDay(); // 0=Sun,1=Mon...\n  if (freq === 'daily')     return true;\n  if (freq === 'weekly')    return day === 1; // Monday\n  if (freq === 'biweekly')  return day === 1 && Math.floor(now.getDate() / 7) % 2 === 0;\n  if (freq === 'monthly')   return now.getDate() === 1;\n  if (freq === 'after_visit') return false; // handled by webhook/source sync\n  return false;\n}\n\nfunction sleep(ms) { return new Promise(r => setTimeout(r, ms)); }\n\nmodule.exports = { runAutomation };\n", "backend/services/emailSender.js": "// services/emailSender.js\nconst { Resend } = require('resend');\n\nconst resend = new Resend(process.env.RESEND_API_KEY || 'YOUR_RESEND_API_KEY');\nconst FROM   = process.env.FROM_EMAIL || 'noreply@mailchef.app';\n\nasync function sendEmail({ to, subject, html, from }) {\n  const result = await resend.emails.send({\n    from:    from || FROM,\n    to:      [to],\n    subject: subject,\n    html:    html,\n  });\n  if (result.error) throw new Error(result.error.message);\n  return result.data;\n}\n\nmodule.exports = { sendEmail };\n", "backend/routes/billing.js": "// routes/billing.js\nconst express = require('express');\nconst db      = require('../database/db');\nconst { requireAuth } = require('../middleware/auth');\n\nconst router = express.Router();\n\nconst PRICES = { starter: 49, professional: 99, enterprise: 249 };\n\n// GET /billing/status\nrouter.get('/status', requireAuth, (req, res) => {\n  const client = db.one('SELECT * FROM clients WHERE id = ?', [req.client.id]);\n  if (!client) return res.status(404).json({ error: 'Client not found' });\n\n  let status = client.status;\n  let trialDaysLeft = 0;\n\n  if (status === 'trial' && client.trial_ends) {\n    const msLeft = new Date(client.trial_ends) - Date.now();\n    trialDaysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));\n    // Auto-expire trial\n    if (trialDaysLeft <= 0) {\n      status = 'inactive';\n      db.run('UPDATE clients SET status = ? WHERE id = ?', ['inactive', client.id]);\n    }\n  }\n\n  res.json({\n    status,\n    plan: client.plan,\n    trialDaysLeft,\n    trialEnds: client.trial_ends,\n    hasCard: !!client.billing_card,\n    price: PRICES[client.plan] || 49,\n  });\n});\n\n// POST /billing/payment-method  (demo — in production use Stripe)\nrouter.post('/payment-method', requireAuth, (req, res) => {\n  const { number, name, expiry, cvc } = req.body;\n  if (!number || !name || !expiry || !cvc) {\n    return res.status(400).json({ error: 'Card details required' });\n  }\n  // Store last 4 digits only (never store full card in prod — use Stripe)\n  const last4 = number.replace(/\\s/g,'').slice(-4);\n  const cardInfo = JSON.stringify({ last4, name, expiry, brand: detectBrand(number) });\n\n  db.run('UPDATE clients SET billing_card = ?, status = ? WHERE id = ?',\n    [cardInfo, 'active', req.client.id]);\n\n  res.json({ success: true, last4 });\n});\n\n// POST /billing/cancel\nrouter.post('/cancel', requireAuth, (req, res) => {\n  db.run('UPDATE clients SET status = ? WHERE id = ?', ['cancelled', req.client.id]);\n  res.json({ success: true });\n});\n\n// POST /billing/reactivate\nrouter.post('/reactivate', requireAuth, (req, res) => {\n  const client = db.one('SELECT billing_card FROM clients WHERE id = ?', [req.client.id]);\n  if (!client?.billing_card) return res.status(400).json({ error: 'No payment method on file' });\n  db.run('UPDATE clients SET status = ? WHERE id = ?', ['active', req.client.id]);\n  res.json({ success: true });\n});\n\n// ── Subscription guard middleware ──────────────────────────\n// Use this on routes that should only work for active/trial subscribers\nfunction requireActive(req, res, next) {\n  const client = db.one('SELECT status, trial_ends FROM clients WHERE id = ?', [req.client.id]);\n  if (!client) return res.status(404).json({ error: 'Client not found' });\n\n  const active = client.status === 'active' ||\n    (client.status === 'trial' && new Date(client.trial_ends) > new Date());\n\n  if (!active) {\n    return res.status(402).json({\n      error: 'Subscription inactive. Please renew your subscription to continue sending emails.',\n      code: 'SUBSCRIPTION_INACTIVE'\n    });\n  }\n  next();\n}\n\nfunction detectBrand(number) {\n  const n = number.replace(/\\s/g,'');\n  if (n.startsWith('4')) return 'Visa';\n  if (/^5[1-5]/.test(n)) return 'Mastercard';\n  if (/^3[47]/.test(n)) return 'Amex';\n  return 'Card';\n}\n\nmodule.exports = router;\nmodule.exports.requireActive = requireActive;\n", "backend/routes/auth.js": "// routes/auth.js\nconst express  = require('express');\nconst bcrypt   = require('bcryptjs');\nconst jwt      = require('jsonwebtoken');\nconst { v4: uuid } = require('uuid');\nconst db       = require('../database/db');\nconst { JWT_SECRET } = require('../middleware/auth');\n\nconst router = express.Router();\n\n// POST /auth/register\nrouter.post('/register', async (req, res) => {\n  try {\n    const { restaurant, name, email, password, plan } = req.body;\n    if (!restaurant || !name || !email || !password) {\n      return res.status(400).json({ error: 'All fields are required' });\n    }\n    const existing = db.one('SELECT id FROM clients WHERE email = ?', [email]);\n    if (existing) return res.status(400).json({ error: 'Email already registered' });\n\n    const hash     = await bcrypt.hash(password, 10);\n    const id       = uuid();\n    const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();\n\n    db.run(\n      'INSERT INTO clients (id,restaurant,name,email,password_hash,plan,status,trial_ends) VALUES (?,?,?,?,?,?,?,?)',\n      [id, restaurant, name, email, hash, plan||'starter', 'trial', trialEnd]\n    );\n\n    const user  = { id, restaurant, name, email, plan: plan||'starter' };\n    const token = jwt.sign(user, JWT_SECRET, { expiresIn: '30d' });\n    res.json({ token, user });\n  } catch(e) {\n    console.error(e);\n    res.status(500).json({ error: 'Registration failed' });\n  }\n});\n\n// POST /auth/login\nrouter.post('/login', async (req, res) => {\n  try {\n    const { email, password } = req.body;\n    const client = db.one('SELECT * FROM clients WHERE email = ?', [email]);\n    if (!client) return res.status(401).json({ error: 'Invalid email or password' });\n\n    const valid = await bcrypt.compare(password, client.password_hash);\n    if (!valid) return res.status(401).json({ error: 'Invalid email or password' });\n\n    const user  = { id: client.id, restaurant: client.restaurant, name: client.name, email: client.email, plan: client.plan };\n    const token = jwt.sign(user, JWT_SECRET, { expiresIn: '30d' });\n    res.json({ token, user });\n  } catch(e) {\n    res.status(500).json({ error: 'Login failed' });\n  }\n});\n\nmodule.exports = router;\n", "backend/routes/all-routes.js": "// routes/dashboard.js\nconst express = require('express');\nconst db      = require('../database/db');\nconst { requireAuth } = require('../middleware/auth');\nconst router  = express.Router();\n\nrouter.get('/stats', requireAuth, (req, res) => {\n  const cid = req.client.id;\n  const totalCustomers      = db.one('SELECT COUNT(*) as c FROM customers WHERE client_id=?', [cid])?.c || 0;\n  const emailsSentThisMonth = db.one(`SELECT COUNT(*) as c FROM emails WHERE client_id=? AND sent_at > datetime('now','start of month')`, [cid])?.c || 0;\n  const newThisWeek         = db.one(`SELECT COUNT(*) as c FROM customers WHERE client_id=? AND created_at > datetime('now','-7 days')`, [cid])?.c || 0;\n  res.json({ totalCustomers, emailsSentThisMonth, newThisWeek, openRate: 42, nextSendIn: 'Mon 11 AM' });\n});\n\nmodule.exports = router;\n\n\n// ── customers.js ───────────────────────────────────────────\nconst custRouter = express.Router();\ncustRouter.use(requireAuth);\n\ncustRouter.get('/', (req, res) => {\n  const customers = db.query('SELECT * FROM customers WHERE client_id=? ORDER BY created_at DESC', [req.client.id]);\n  res.json({ customers: customers.map(c => ({\n    ...c, aiType: c.ai_type, aiNotes: c.ai_notes, lastPurchase: c.last_purchase,\n    emailsSent: c.emails_sent, orderHistory: JSON.parse(c.order_history||'[]'),\n  }))});\n});\n\ncustRouter.post('/', (req, res) => {\n  const { v4: uuid } = require('uuid');\n  const { name, email, phone, dietary, lastPurchase } = req.body;\n  if (!name || !email) return res.status(400).json({ error: 'name and email required' });\n  const existing = db.one('SELECT id FROM customers WHERE client_id=? AND email=?', [req.client.id, email]);\n  if (existing) return res.status(409).json({ error: 'Customer already exists' });\n  const id = uuid();\n  db.run('INSERT INTO customers (id,client_id,name,email,phone,last_purchase,dietary) VALUES (?,?,?,?,?,?,?)',\n    [id, req.client.id, name, email, phone||null, lastPurchase||null, dietary||null]);\n  res.json({ success: true, id });\n});\n\nmodule.exports.customers = custRouter;\n\n\n// ── sources.js ─────────────────────────────────────────────\nconst srcRouter = express.Router();\nsrcRouter.use(requireAuth);\n\nsrcRouter.get('/', (req, res) => {\n  const sources = db.query('SELECT * FROM sources WHERE client_id=?', [req.client.id]);\n  res.json({ sources });\n});\n\nsrcRouter.post('/', (req, res) => {\n  const { v4: uuid } = require('uuid');\n  const { type, name, url, apiKey } = req.body;\n  if (!type || !name) return res.status(400).json({ error: 'type and name required' });\n  const id = uuid();\n  db.run('INSERT INTO sources (id,client_id,type,name,url,api_key) VALUES (?,?,?,?,?,?)',\n    [id, req.client.id, type, name, url||null, apiKey||null]);\n  // Trigger async sync\n  const { syncSource } = require('../services/dataSyncer');\n  const src = db.one('SELECT * FROM sources WHERE id=?', [id]);\n  syncSource(src).catch(e => console.error('[SYNC]', e.message));\n  res.json({ success: true, id });\n});\n\nsrcRouter.delete('/:id', (req, res) => {\n  db.run('UPDATE sources SET status=? WHERE id=? AND client_id=?', ['removed', req.params.id, req.client.id]);\n  res.json({ success: true });\n});\n\nsrcRouter.post('/sync', (req, res) => {\n  const { syncAllSources } = require('../services/dataSyncer');\n  syncAllSources().catch(e => console.error('[SYNC]', e.message));\n  res.json({ success: true, message: 'Sync started' });\n});\n\nmodule.exports.sources = srcRouter;\n\n\n// ── emails.js ──────────────────────────────────────────────\nconst emlRouter = express.Router();\nemlRouter.use(requireAuth);\n\nemlRouter.get('/', (req, res) => {\n  const limit = parseInt(req.query.limit) || 50;\n  const emails = db.query(\n    'SELECT * FROM emails WHERE client_id=? ORDER BY sent_at DESC LIMIT ?',\n    [req.client.id, limit]\n  );\n  res.json({ emails: emails.map(e => ({ ...e, emailType: e.email_type, customerName: e.customer_name, sentAt: e.sent_at })) });\n});\n\n// Track email opens via pixel\nemlRouter.get('/open/:id', (req, res) => {\n  db.run('UPDATE emails SET opened=1 WHERE id=?', [req.params.id]);\n  // Return 1x1 transparent gif\n  const buf = Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7','base64');\n  res.set('Content-Type','image/gif').send(buf);\n});\n\nmodule.exports.emails = emlRouter;\n\n\n// ── automation.js ──────────────────────────────────────────\nconst autoRouter = express.Router();\nautoRouter.use(requireAuth);\n\nautoRouter.post('/settings', (req, res) => {\n  const settings = JSON.stringify(req.body);\n  db.run('UPDATE clients SET automation=? WHERE id=?', [settings, req.client.id]);\n  res.json({ success: true });\n});\n\nautoRouter.get('/settings', (req, res) => {\n  const client = db.one('SELECT automation FROM clients WHERE id=?', [req.client.id]);\n  res.json(JSON.parse(client?.automation || '{}'));\n});\n\n// Manually trigger email for one customer\nautoRouter.post('/send/:customerId', requireAuth, async (req, res) => {\n  const { requireActive } = require('./billing');\n  const client   = db.one('SELECT * FROM clients WHERE id=?', [req.client.id]);\n  const customer = db.one('SELECT * FROM customers WHERE id=? AND client_id=?', [req.params.customerId, req.client.id]);\n  if (!customer) return res.status(404).json({ error: 'Customer not found' });\n  try {\n    const { generatePersonalizedEmail, renderEmailHtml } = require('../services/aiEngine');\n    const { sendEmail } = require('../services/emailSender');\n    const { v4: uuid }  = require('uuid');\n    const emailType = req.body.emailType || customer.ai_type || 'welcome';\n    const parsed    = await generatePersonalizedEmail({ ...customer, orderHistory: JSON.parse(customer.order_history||'[]'), aiNotes: customer.ai_notes }, client, emailType);\n    const html      = renderEmailHtml(parsed, customer, client);\n    await sendEmail({ to: customer.email, subject: parsed.subject, html });\n    db.run('INSERT INTO emails (id,client_id,customer_id,customer_name,email_type,subject,html_body) VALUES (?,?,?,?,?,?,?)',\n      [uuid(), client.id, customer.id, customer.name, emailType, parsed.subject, html]);\n    db.run('UPDATE customers SET emails_sent=emails_sent+1 WHERE id=?', [customer.id]);\n    res.json({ success: true, subject: parsed.subject });\n  } catch(e) { res.status(500).json({ error: e.message }); }\n});\n\nmodule.exports.automation = autoRouter;\n"};
+
+// ── API endpoint ──────────────────────────────────────────
+const API = 'http://localhost:4000';
+
+// ── Page routing ──────────────────────────────────────────
+function goPage(id, plan) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if (plan && document.getElementById('reg-plan')) document.getElementById('reg-plan').value = plan;
+  if (id === 'p-dashboard') initDash();
+}
+function scrollTo2(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+function showSetupGuide() { document.getElementById('setup-modal').classList.remove('hidden'); }
+
+// ── Auth helpers ──────────────────────────────────────────
+const getToken = ()  => localStorage.getItem('mc_token');
+const getUser  = ()  => JSON.parse(localStorage.getItem('mc_user') || 'null');
+const setAuth  = (t,u) => { localStorage.setItem('mc_token',t); localStorage.setItem('mc_user',JSON.stringify(u)); };
+const clearAuth = ()  => { localStorage.removeItem('mc_token'); localStorage.removeItem('mc_user'); };
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.remove('hidden');
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pw    = document.getElementById('login-pw').value;
+  if (!email||!pw) return showErr('login-err','Fill in all fields.');
+  try {
+    const r = await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
+    const d = await r.json();
+    if (!r.ok) return showErr('login-err', d.error||'Login failed.');
+    setAuth(d.token, d.user); goPage('p-dashboard');
+  } catch(e) { showErr('login-err','Cannot reach backend. Make sure the server is running on localhost:4000. See the Setup Guide in the footer.'); }
+}
+
+async function doRegister() {
+  const restaurant = document.getElementById('reg-restaurant').value.trim();
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pw = document.getElementById('reg-pw').value;
+  const plan = document.getElementById('reg-plan').value;
+  if (!restaurant||!name||!email||!pw) return showErr('reg-err','Fill in all fields.');
+  if (pw.length < 8) return showErr('reg-err','Password must be at least 8 characters.');
+  try {
+    const r = await fetch(API+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({restaurant,name,email,password:pw,plan})});
+    const d = await r.json();
+    if (!r.ok) return showErr('reg-err', d.error||'Registration failed.');
+    setAuth(d.token, d.user); goPage('p-dashboard');
+  } catch(e) { showErr('reg-err','Cannot reach backend. See the Setup Guide link in the footer.'); }
+}
+
+function doLogout() { clearAuth(); goPage('p-landing'); }
+
+// ── Dashboard nav ─────────────────────────────────────────
+const DASH_SECTIONS = ['overview','connect','customers','automation','emails','billing'];
+function showDash(name) {
+  DASH_SECTIONS.forEach(n => {
+    document.getElementById('dash-'+n)?.classList.toggle('hidden', n!==name);
+    document.getElementById('nav-'+n)?.classList.toggle('active', n===name);
+  });
+}
+
+// ── Dashboard init ────────────────────────────────────────
+const AI_BADGE = {loyalist:'badge-green',deal_seeker:'badge-amber',adventurer:'badge-purple',lapsed:'badge-blue',new_guest:'badge-gray'};
+const AI_LABEL = {loyalist:'Loyalist',deal_seeker:'Deal-seeker',adventurer:'Adventurer',lapsed:'Lapsed',new_guest:'New guest'};
+let allCust = [];
+
+async function initDash() {
+  const user = getUser();
+  if (!user) { goPage('p-login'); return; }
+  const h = new Date().getHours();
+  document.getElementById('dash-greet').textContent = (h<12?'Good morning':h<18?'Good afternoon':'Good evening')+', '+user.name.split(' ')[0]+' 👋';
+  document.getElementById('dash-rname').textContent = user.restaurant+' · MailChef dashboard';
+  const hdr = {'Authorization':'Bearer '+getToken()};
+  try {
+    const [subR,statsR,custR,emlR,srcR] = await Promise.all([
+      fetch(API+'/billing/status',{headers:hdr}),
+      fetch(API+'/dashboard/stats',{headers:hdr}),
+      fetch(API+'/customers',{headers:hdr}),
+      fetch(API+'/emails?limit=20',{headers:hdr}),
+      fetch(API+'/sources',{headers:hdr}),
+    ]);
+    const [sub,stats,cust,eml,src] = await Promise.all([subR.json(),statsR.json(),custR.json(),emlR.json(),srcR.json()]);
+    renderSub(sub); renderStats(stats);
+    allCust = cust.customers||[];
+    renderCust(allCust); renderSeg(allCust);
+    renderRecent(eml.emails||[]); renderEmails(eml.emails||[]);
+    renderSrc(src.sources||[]); renderBillInfo(sub);
+    const p=sub.plan||'starter';
+    document.getElementById('sidebar-plan').innerHTML='<strong>'+p.charAt(0).toUpperCase()+p.slice(1)+'</strong><br>'+(sub.status==='trial'?(sub.trialDaysLeft||14)+' days left in trial':sub.status.charAt(0).toUpperCase()+sub.status.slice(1));
+  } catch(e) {
+    console.warn('Backend offline:', e.message);
+    document.getElementById('trial-banner').style.display='flex';
+    document.getElementById('trial-banner').classList.remove('hidden');
+    document.getElementById('trial-banner').innerHTML='<span>⚠️ Backend not connected — <a href="#" onclick="showSetupGuide()" style="color:inherit;font-weight:600;">see setup guide →</a> to start the server and enable all features.</span>';
+  }
+}
+
+function renderSub(sub) {
+  const m={active:'badge-green',trial:'badge-amber',inactive:'badge-red',cancelled:'badge-red'};
+  const l={active:'Active',trial:'Free trial',inactive:'Inactive',cancelled:'Cancelled'};
+  const st=sub.status||'trial';
+  document.getElementById('sub-badge').innerHTML=`<span class="badge ${m[st]||'badge-gray'}">${l[st]||st}</span>`;
+  if(st==='inactive'||st==='cancelled'){document.getElementById('auto-on').classList.add('hidden');document.getElementById('auto-off').classList.remove('hidden');}
+  if(st==='trial'){document.getElementById('trial-banner').style.display='flex';document.getElementById('trial-banner').classList.remove('hidden');document.getElementById('trial-days').textContent=sub.trialDaysLeft||14;}
+}
+
+function renderStats(d) {
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s('s-cust',d.totalCustomers??'–'); s('s-sent',d.emailsSentThisMonth??'–');
+  s('s-open',d.openRate?d.openRate+'%':'–'); s('s-next',d.nextSendIn??'–');
+  if(d.newThisWeek) document.getElementById('s-cust-note').textContent='+'+d.newThisWeek+' this week';
+}
+
+function renderCust(list) {
+  const tb=document.getElementById('cust-tbody');
+  if(!list.length){tb.innerHTML='<tr><td colspan="6" class="text-muted text-sm" style="padding:2rem;text-align:center;">No customers yet. Connect a data source.</td></tr>';return;}
+  tb.innerHTML=list.map(c=>`<tr>
+    <td style="font-weight:500;">${c.name}</td><td class="text-secondary">${c.email}</td>
+    <td><span class="badge ${AI_BADGE[c.aiType]||'badge-gray'}">${AI_LABEL[c.aiType]||c.aiType||'–'}</span></td>
+    <td class="text-secondary">${c.lastPurchase||'–'}</td><td class="text-secondary">${c.emailsSent||0}</td>
+    <td><span class="badge ${c.subscribed?'badge-green':'badge-gray'}">${c.subscribed?'Active':'Unsub'}</span></td>
+  </tr>`).join('');
+}
+
+function filterCust(q){renderCust(q?allCust.filter(c=>c.name.toLowerCase().includes(q.toLowerCase())||c.email.toLowerCase().includes(q.toLowerCase())):allCust);}
+
+function renderSeg(list) {
+  const el=document.getElementById('seg-list');
+  if(!list.length){el.innerHTML='<div class="text-xs text-muted">No customers yet.</div>';return;}
+  const counts={};list.forEach(c=>{counts[c.aiType]=(counts[c.aiType]||0)+1;});
+  el.innerHTML=Object.entries(counts).map(([t,n])=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--border);"><span class="badge ${AI_BADGE[t]||'badge-gray'}">${AI_LABEL[t]||t}</span><span class="text-sm text-secondary">${n} customer${n!==1?'s':''}</span></div>`).join('');
+}
+
+function renderRecent(emails) {
+  const el=document.getElementById('recent-list');
+  if(!emails.length){el.innerHTML='<div class="text-xs text-muted">No emails sent yet.</div>';return;}
+  el.innerHTML=emails.slice(0,4).map(e=>`<div style="padding:8px 0;border-bottom:.5px solid var(--border);font-size:13px;"><div style="font-weight:500;">${e.customerName||e.customer_name}</div><div style="color:var(--text2);font-size:12px;">${e.subject}</div><div style="color:var(--text3);font-size:11px;margin-top:2px;">${(e.sentAt||e.sent_at||'').slice(0,16)}</div></div>`).join('');
+}
+
+function renderEmails(emails) {
+  const tb=document.getElementById('emails-tbody');
+  if(!emails.length){tb.innerHTML='<tr><td colspan="5" class="text-muted text-sm" style="padding:2rem;text-align:center;">No emails sent yet.</td></tr>';return;}
+  tb.innerHTML=emails.map(e=>`<tr><td style="font-weight:500;">${e.customerName||e.customer_name}</td><td class="text-secondary">${e.subject}</td><td><span class="badge ${AI_BADGE[e.emailType||e.email_type]||'badge-gray'}">${AI_LABEL[e.emailType||e.email_type]||'–'}</span></td><td class="text-secondary">${(e.sentAt||e.sent_at||'').slice(0,16)}</td><td><span class="badge ${e.opened?'badge-green':'badge-gray'}">${e.opened?'Opened':'Sent'}</span></td></tr>`).join('');
+}
+
+// ── Sources ───────────────────────────────────────────────
+function toggleSrcForm(){document.getElementById('src-form').classList.toggle('hidden');}
+function onSrcChange(){
+  const t=document.getElementById('src-type').value;
+  document.getElementById('src-url-row').classList.toggle('hidden',t==='csv');
+  document.getElementById('src-key-row').classList.toggle('hidden',!['opentable','square','toast','resy','api'].includes(t));
+  const ph={website:'https://yourrestaurant.com',opentable:'Your OpenTable restaurant ID',square:'Square access token',toast:'Toast API base URL',api:'https://your-api.com/customers'};
+  document.getElementById('src-url').placeholder=ph[t]||'URL or endpoint';
+}
+async function doAddSrc(){
+  const type=document.getElementById('src-type').value,name=document.getElementById('src-name').value.trim();
+  const url=document.getElementById('src-url').value.trim(),key=document.getElementById('src-key').value.trim();
+  if(!name)return alert('Please enter a source name.');
+  try{
+    const r=await fetch(API+'/sources',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getToken()},body:JSON.stringify({type,name,url,apiKey:key})});
+    const d=await r.json();
+    if(!r.ok)return alert(d.error||'Failed to add source.');
+    toggleSrcForm(); initDash(); alert('Source connected! Customers will sync within a few minutes.');
+  }catch(e){alert('Backend not connected. Start the backend server first — see the Setup Guide.');}
+}
+function renderSrc(srcs){
+  const el=document.getElementById('src-list');
+  if(!srcs.length){el.innerHTML='<div class="text-xs text-muted">No sources yet.</div>';return;}
+  const icons={website:'🌐',opentable:'📅',square:'🟦',toast:'🍞',resy:'🪑',api:'⚡'};
+  el.innerHTML=srcs.map(s=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);"><span style="font-size:18px;">${icons[s.type]||'🔗'}</span><div style="flex:1;"><div style="font-size:13px;font-weight:500;">${s.name}</div><div style="font-size:11px;color:var(--text3);">${s.url||s.type} · Last synced: ${s.last_synced||s.lastSynced||'Never'}</div></div><span class="badge ${s.status==='active'?'badge-green':'badge-gray'}">${s.status==='active'?'Active':'Pending'}</span><button onclick="delSrc('${s.id}')" style="font-size:12px;color:#999;background:none;border:none;cursor:pointer;">Remove</button></div>`).join('');
+}
+async function delSrc(id){if(!confirm('Remove this source?'))return;await fetch(API+'/sources/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+getToken()}});initDash();}
+async function doSync(){try{await fetch(API+'/sources/sync',{method:'POST',headers:{'Authorization':'Bearer '+getToken()}});alert('Sync started!');setTimeout(initDash,3000);}catch(e){alert('Backend not connected.');}}
+
+// ── Automation ────────────────────────────────────────────
+async function doSaveAuto(){
+  const s={frequency:document.getElementById('af').value,sendTime:document.getElementById('at').value,delay:document.getElementById('ad').value,maxPerMonth:document.getElementById('am').value};
+  try{await fetch(API+'/automation/settings',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getToken()},body:JSON.stringify(s)});alert('Automation settings saved!');}
+  catch(e){alert('Backend not connected.');}
+}
+
+// ── Billing ───────────────────────────────────────────────
+function renderBillInfo(sub){
+  const el=document.getElementById('bill-info');if(!el)return;
+  const prices={starter:'$49',professional:'$99',enterprise:'$249'};
+  const p=sub.plan||'starter';
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;"><div><div style="font-size:15px;font-weight:600;">${p.charAt(0).toUpperCase()+p.slice(1)} plan</div><div class="text-sm text-secondary">${prices[p]}/month · ${sub.status==='trial'?'Trial ends in '+(sub.trialDaysLeft||14)+' days':sub.status}</div></div><span class="badge ${sub.status==='active'?'badge-green':sub.status==='trial'?'badge-amber':'badge-red'}" style="margin-left:auto;">${sub.status==='trial'?'Free trial':sub.status}</span></div>`;
+}
+function fmtCard(inp){inp.value=inp.value.replace(/\D/g,'').substring(0,16).replace(/(.{4})/g,'$1 ').trim();}
+async function doSaveBill(){
+  const num=document.getElementById('cnum').value.replace(/\s/g,''),name=document.getElementById('cname').value.trim(),exp=document.getElementById('cexp').value,cvc=document.getElementById('ccvc').value;
+  if(!num||!name||!exp||!cvc)return alert('Please fill in all card details.');
+  try{
+    const r=await fetch(API+'/billing/payment-method',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getToken()},body:JSON.stringify({number:num,name,expiry:exp,cvc})});
+    const d=await r.json();if(!r.ok)return alert(d.error||'Failed to save card.');
+    alert('Payment saved! Subscription is now active.');initDash();
+  }catch(e){alert('Backend not connected.');}
+}
+async function doCancelSub(){
+  if(!confirm('Cancel subscription? All emails will pause immediately.'))return;
+  try{await fetch(API+'/billing/cancel',{method:'POST',headers:{'Authorization':'Bearer '+getToken()}});alert('Subscription cancelled. Emails paused.');initDash();}
+  catch(e){alert('Backend not connected.');}
+}
+
+// ── Backend download (generates shell setup script) ───────
+function downloadBackend(){
+  const lines=['#!/bin/bash','# MailChef Backend Setup Script','# Run: bash setup-mailchef-backend.sh','','set -e','mkdir -p mailchef-backend','cd mailchef-backend',''];
+  Object.entries(BACKEND_FILES).forEach(([path,content])=>{
+    const filename=path.replace('backend/','');
+    const dir=filename.includes('/')?filename.substring(0,filename.lastIndexOf('/')):'';
+    if(dir) lines.push(`mkdir -p "${dir}"`);
+    lines.push(`cat > '${filename}' << 'MCEOF'`);
+    lines.push(content.replace(/MCEOF/g,'MC_EOF'));
+    lines.push('MCEOF','');
+  });
+  lines.push('echo ""','echo "✅ MailChef backend files created in ./mailchef-backend/"','echo ""','echo "Next steps:"','echo "  1. Create a .env file with your API keys (see README)"','echo "  2. npm install"','echo "  3. node server.js"','echo ""');
+  const blob=new Blob([lines.join('\n')],{type:'text/plain'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='setup-mailchef-backend.sh';a.click();
+}
+
+// ── Auto-redirect if logged in ────────────────────────────
+if(getToken()&&getUser()) goPage('p-dashboard');
+</script>
+</body>
+</html>
